@@ -13,15 +13,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class S3FileSystemUnitTest {
-  private FileSystem localfs;
-  private String     protocol           = "s3";
-  private String     testFileName       = "test.txt";
+  private String protocol           = "s3";
+  private String testFileName       = "test.txt";
 
   // Please update awsAccessKeyId when running this test
-  private String     awsAccessKeyId     = "xxxx";
+  private String awsAccessKeyId     = "xxxx";
 
   // Please update awsSecretAccessKey when running this test
-  private String     awsSecretAccessKey = "xxxx";
+  private String awsSecretAccessKey = "xxxx";
 
   @Test
   public void testUsingHadoopFileSystemS3Write() throws Exception {
@@ -69,11 +68,13 @@ public class S3FileSystemUnitTest {
   }
 
   private void createLocalData(Path path) throws IOException {
+    FileSystem localfs;
     String TEXT = "hello s3 test";
     localfs = FileSystem.getLocal(new Configuration());
     FSDataOutputStream os = localfs.create(path);
     os.write(TEXT.getBytes());
     os.close();
+    localfs.close();
   }
 
   private FileSystem getFileSystem(String path) throws IOException {
