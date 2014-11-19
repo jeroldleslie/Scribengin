@@ -16,23 +16,30 @@ public class S3FileSystemUnitTest {
   private FileSystem localfs;
   private String     protocol           = "s3";
   private String     testFileName       = "test.txt";
+
+  // Please update awsAccessKeyId when running this test
   private String     awsAccessKeyId     = "xxxx";
+
+  // Please update awsSecretAccessKey when running this test
   private String     awsSecretAccessKey = "xxxx";
 
   @Test
-  public void testUsingHadoopFileSystemS3Write() throws IOException {
+  public void testUsingHadoopFileSystemS3Write() throws Exception {
     Assert.assertFalse("Please update the awsAccessKeyId in this unit test",
         "xxxx".equals(this.awsAccessKeyId));
     Assert.assertFalse("Please update the awsSecretAccessKey in this unit test",
         "xxxx".equals(this.awsSecretAccessKey));
+
     Path srcPath = new Path("./build/s3/" + testFileName);
     String destPathStr = protocol + "://pleslie/s3testpath/" + testFileName;
     Path destPath = new Path(destPathStr);
+
     createLocalData(srcPath);
+
     getFileSystem(destPathStr).moveFromLocalFile(srcPath, destPath);
+    Thread.sleep(1000);
     String path = getS3Paths(destPathStr)[0];
-    System.out.println("destpath path >> " + destPathStr);
-    System.out.println("s3 path >> " + path);
+
     Assert.assertEquals(path, destPathStr);
   }
 
