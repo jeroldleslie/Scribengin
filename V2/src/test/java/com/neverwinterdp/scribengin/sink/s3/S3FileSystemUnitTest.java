@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class S3FileSystemUnitTest {
-  private String protocol           = "s3";
+  private String protocol           = "s3n";
   private String testFileName       = "test.txt";
 
   // Please update awsAccessKeyId when running this test
@@ -21,6 +21,9 @@ public class S3FileSystemUnitTest {
 
   // Please update awsSecretAccessKey when running this test
   private String awsSecretAccessKey = "xxxx";
+
+  private String s3Bucket           = "pleslie";
+  private String s3Path             = "s3test";
 
   @Test
   public void testUsingHadoopFileSystemS3Write() throws Exception {
@@ -30,7 +33,7 @@ public class S3FileSystemUnitTest {
         "xxxx".equals(this.awsSecretAccessKey));
 
     Path srcPath = new Path("./build/s3/" + testFileName);
-    String destPathStr = protocol + "://pleslie/s3testpath/" + testFileName;
+    String destPathStr = protocol + "://" + s3Bucket + "/" + s3Path + "/" + testFileName;
     Path destPath = new Path(destPathStr);
 
     createLocalData(srcPath);
@@ -48,7 +51,7 @@ public class S3FileSystemUnitTest {
         "xxxx".equals(this.awsAccessKeyId));
     Assert.assertFalse("Please update the awsSecretAccessKey in this unit test",
         "xxxx".equals(this.awsSecretAccessKey));
-    String path = protocol + "://pleslie/s3testpath/";
+    String path = protocol + "://" + s3Bucket + "/" + s3Path + "/";
     getS3Paths(path);
   }
 
@@ -75,6 +78,7 @@ public class S3FileSystemUnitTest {
     os.write(TEXT.getBytes());
     os.close();
     localfs.close();
+
   }
 
   private FileSystem getFileSystem(String path) throws IOException {
